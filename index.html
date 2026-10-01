@@ -19,6 +19,7 @@
     --sage-soft:rgba(122,158,126,.12);
     --terra:#C4704B;
     --terra-dark:#A85B38;
+    --terra-bright:#D46130;
     --line:#E8E3DD;
     --dark:#1E1E1E;
     --dark-2:#262624;
@@ -78,12 +79,12 @@
   .btn-terra{background:var(--terra);color:#fff;box-shadow:0 6px 20px rgba(196,112,75,.3)}
   .btn-terra:hover{background:var(--terra-dark);box-shadow:0 10px 26px rgba(196,112,75,.36)}
   .btn-lg{padding:18px 36px;font-size:17px}
-  .btn-ink{background:var(--dark);color:#fff;box-shadow:0 6px 20px rgba(30,30,30,.22)}
-  .btn-ink:hover{background:#333331;box-shadow:0 10px 26px rgba(30,30,30,.3)}
-  .btn-ghost{border:1.5px solid var(--line);color:var(--ink);background:#fff}
-  .btn-ghost:hover{border-color:var(--sage);color:var(--sage-dark);background:#fff}
+  .btn-ink{background:var(--terra);color:#fff;border:1px solid var(--terra);box-shadow:0 6px 20px rgba(196,112,75,.24)}
+  .btn-ink:hover{background:var(--terra-dark);border-color:var(--terra-dark);color:#fff;box-shadow:inset 0 0 0 1.5px var(--terra-dark),0 10px 26px rgba(196,112,75,.32)}
+  .btn-ghost{border:1px solid var(--terra);color:#fff;background:var(--terra);transition:background .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease;box-shadow:0 6px 20px rgba(196,112,75,.24)}
+  .btn-ghost:hover{background:var(--terra-dark);border-color:var(--terra-dark);color:#fff;box-shadow:inset 0 0 0 1.5px var(--terra-dark),0 10px 26px rgba(196,112,75,.32)}
   .btn-ghost.on-dark{border-color:rgba(255,255,255,.25);color:#fff;background:transparent}
-  .btn-ghost.on-dark:hover{border-color:var(--sage);color:var(--sage);background:rgba(255,255,255,.04)}
+  .btn-ghost.on-dark:hover{border-color:var(--sage);color:var(--sage);background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px var(--sage)}
 
   /* ============ HEADER ============ */
   .site-header{
@@ -136,10 +137,11 @@
   .hero-points li{display:flex;align-items:center;gap:8px;font-size:14.5px;color:var(--muted);font-weight:500}
   .hero-points svg{width:17px;height:17px;stroke:var(--sage-dark);fill:none;stroke-width:2;flex:none}
   .hero-media{position:relative;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-lg)}
-  .hero-media img{width:100%;aspect-ratio:1.05/1;object-fit:cover}
+  .hero-media img{width:100%;height:auto;aspect-ratio:1.2/1;object-fit:cover}
   .hero-badge{
     position:absolute;left:-18px;bottom:26px;background:#fff;border-radius:var(--radius);
-    padding:16px 20px;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:13px;border:1px solid var(--line);
+    padding:16px 20px;box-shadow:0 6px 20px rgba(94,130,98,.16);display:flex;align-items:center;gap:13px;
+    border:1.5px solid var(--sage);
   }
   .hero-badge .ic{width:42px;height:42px;border-radius:11px;background:var(--sage-soft);display:grid;place-items:center;flex:none}
   .hero-badge .ic svg{width:22px;height:22px;stroke:var(--sage-dark);fill:none;stroke-width:1.7}
@@ -159,10 +161,12 @@
 
   /* ============ PAINS ============ */
   .pains-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px}
-  .pain-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:34px 30px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-  .pain-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:#d9d3ca}
+  .pain-card{transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+  .pain-inner{height:100%;background:#fff;border:1px solid transparent;border-radius:var(--radius);padding:34px 30px;
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+  .pain-card:hover .pain-inner{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:var(--sage)}
   .pain-ic{width:54px;height:54px;border-radius:14px;background:var(--cream);display:grid;place-items:center;margin-bottom:22px}
-  .pain-ic svg{width:27px;height:27px;stroke:var(--terra);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .pain-ic svg{width:27px;height:27px;stroke:var(--terra-bright);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
   .pain-card h3{margin-bottom:12px}
   .pain-card p{color:var(--muted);font-size:15.5px}
   .pain-quote{font-style:italic}
@@ -174,18 +178,30 @@
   .solution h3{margin:20px 0 14px;color:#fff}
   .solution p{color:var(--dark-muted);font-size:15.5px}
   .solutions-band{margin-top:56px;background:var(--dark-2);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);
-    padding:26px 30px;display:flex;flex-wrap:wrap;gap:14px 34px;align-items:center}
-  .solutions-band .chip{display:flex;align-items:center;gap:10px;font-size:14.5px;color:#fff;font-weight:500}
+    padding:26px 28px;display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:center}
+  .solutions-band .chip{display:flex;align-items:center;gap:10px;font-size:14px;color:#fff;font-weight:500}
   .solutions-band .chip svg{width:18px;height:18px;stroke:var(--sage);fill:none;stroke-width:2;flex:none}
 
   /* ============ CATALOG ============ */
-  .catalog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px}
-  .cat-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 28px;display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-  .cat-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:#d9d3ca}
-  .cat-ic{width:48px;height:48px;border-radius:12px;background:var(--sage-soft);display:grid;place-items:center;margin-bottom:20px}
+  /* arrows: own row above the cards, centred */
+  .cat-navs{display:flex;justify-content:center;gap:16px;margin-bottom:28px}
+  .cat-nav{flex:none;width:72px;height:72px;border-radius:50%;
+    background:#fff;border:1px solid var(--line);display:grid;place-items:center;
+    box-shadow:var(--shadow-sm);transition:.18s ease}
+  .cat-nav svg{width:30px;height:30px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .cat-nav:hover:not(:disabled){border-color:var(--sage);background:var(--sage-soft)}
+  .cat-nav:disabled{opacity:.35;cursor:not-allowed}
+  .cat-slider{margin-top:52px}
+  .cat-track{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin:0;padding:0}
+  .cat-card[hidden]{display:none}
+  .cat-card{background:#fff;border:1px solid #D8D0C4;border-radius:var(--radius);padding:30px 28px;display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+  .cat-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:var(--sage)}
+  .cat-top{display:flex;align-items:center;gap:18px;margin-bottom:20px}
+  .cat-card .cat-ic{width:64px;height:64px;border-radius:14px;background:var(--sage-soft);display:grid;place-items:center;margin-bottom:0;flex:none}
+  .cat-card .cat-ic svg{width:34px;height:34px}
   .cat-ic svg{width:24px;height:24px;stroke:var(--sage-dark);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-  .cat-card h3{margin-bottom:8px}
-  .cat-price{font-family:'Manrope',sans-serif;font-weight:700;color:var(--terra);font-size:15px;margin-bottom:14px}
+  .cat-top h3{margin-bottom:0}
+  .cat-price{font-family:'Manrope',sans-serif;font-weight:700;color:var(--terra-bright);font-size:15px;margin-bottom:14px}
   .cat-card p{color:var(--muted);font-size:15px;margin-bottom:18px}
   .cat-list{list-style:none;margin:auto 0 0;padding:16px 0 0;border-top:1px solid var(--line);display:grid;gap:8px}
   .cat-list li{display:flex;gap:9px;align-items:flex-start;font-size:14px;color:var(--muted)}
@@ -228,7 +244,7 @@
   .rev-card:hover{box-shadow:var(--shadow-md);transform:translateY(-4px)}
   .rev-body{padding:38px 34px 34px;display:flex;flex-direction:column;flex:1;align-items:center;text-align:center;max-width:780px;margin:0 auto;width:100%}
   .stars{display:flex;gap:3px;margin-bottom:20px;justify-content:center}
-  .stars svg{width:18px;height:18px;fill:var(--terra);stroke:none}
+  .stars svg{width:18px;height:18px;fill:var(--terra-bright);stroke:none}
   .rev-body blockquote{margin:0;font-size:18px;color:var(--ink);line-height:1.75;flex:1;max-width:720px}
   .rev-author{display:flex;align-items:center;gap:13px;margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
   .rev-ava{width:46px;height:46px;border-radius:50%;background:var(--sage);color:#fff;display:grid;place-items:center;font-family:'Manrope',sans-serif;font-weight:700;font-size:16px;flex:none}
@@ -351,9 +367,10 @@
   .final h2{color:#fff;max-width:820px;margin:0 auto;font-size:clamp(30px,4vw,48px)}
   .final p{color:rgba(255,255,255,.9);max-width:640px;margin:22px auto 0;font-size:18px}
   .final .btn{margin-top:38px}
-  .final-trigger{margin-top:26px;font-size:15px;color:#fff;display:inline-flex;align-items:center;gap:10px;
-    background:rgba(122,158,126,.2);border:1px solid rgba(122,158,126,.42);padding:12px 20px;border-radius:999px}
-  .final-trigger svg{width:18px;height:18px;stroke:var(--sage);fill:none;stroke-width:1.7;flex:none}
+  .final-trigger{margin:26px auto 0;width:fit-content;max-width:100%;font-size:15px;font-weight:600;color:#fff;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    background:var(--sage);border:0;padding:12px 20px;border-radius:999px;box-shadow:0 6px 20px rgba(122,158,126,.28)}
+  .final-trigger svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.7;flex:none}
 
   /* ============ FOOTER ============ */
   .footer{background:var(--dark);color:var(--footer-text);padding:64px 0 30px;border-top:1px solid rgba(255,255,255,.07)}
@@ -419,7 +436,7 @@
     .hero-media img{aspect-ratio:16/11}
     .hero-badge{left:16px}
     .hero-stats{gap:24px;flex-wrap:wrap}
-    .pains-grid,.solutions-grid,.catalog-grid{grid-template-columns:repeat(2,1fr)}
+    .pains-grid,.solutions-grid{grid-template-columns:repeat(2,1fr)}
     .portfolio-grid{gap:12px}
     .work-card{flex-basis:calc((100% - 3 * 12px) / 4)}
     .solutions-grid{gap:34px}
@@ -444,7 +461,11 @@
     .hero-cta .btn{width:100%}
     .hero-stats{gap:20px 28px}
     .hero-stat b{font-size:22px}
-    .pains-grid,.solutions-grid,.catalog-grid{grid-template-columns:1fr}
+    .pains-grid,.solutions-grid{grid-template-columns:1fr}
+    .cat-track{grid-template-columns:1fr;gap:16px;margin:0}
+    .cat-navs{gap:14px;margin-bottom:24px}
+    .cat-nav{width:60px;height:60px}
+    .cat-nav svg{width:25px;height:25px}
     .portfolio-grid{gap:10px}
     .work-card{flex-basis:calc((100% - 2 * 10px) / 3)}
     .solutions-grid{gap:30px}
@@ -556,25 +577,31 @@
     </div>
     <div class="pains-grid">
       <article class="pain-card reveal">
-        <div class="pain-ic" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M2 12h3l2-5 4 10 3-8 2 3h6"/><circle cx="20" cy="5" r="2"/><path d="m19 3 3 3"/></svg>
+        <div class="pain-inner">
+          <div class="pain-ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M2 12h3l2-5 4 10 3-8 2 3h6"/><circle cx="20" cy="5" r="2"/><path d="m19 3 3 3"/></svg>
+          </div>
+          <h3>«Ловушка индивидуального размера»</h3>
+          <p class="pain-quote">«Замерил сам рулеткой, заказал в интернете, а они не подошли к раме на полсантиметра. И куда их теперь девать? Это же индивидуальный размер, назад не примешь, деньги на ветер».</p>
         </div>
-        <h3>«Ловушка индивидуального размера»</h3>
-        <p class="pain-quote">«Замерил сам рулеткой, заказал в интернете, а они не подошли к раме на полсантиметра. И куда их теперь девать? Это же индивидуальный размер, назад не примешь, деньги на ветер».</p>
       </article>
       <article class="pain-card reveal">
-        <div class="pain-ic" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+        <div class="pain-inner">
+          <div class="pain-ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+          </div>
+          <h3>«Выцветший хлам и пылесборник»</h3>
+          <p class="pain-quote">«Прошел год, и ткань на балконе просто выцвела и стала хрупкой. А на кухне на ламелях оседает такой слой жира и пыли, что мыть их — это целый ад, проще выкинуть».</p>
         </div>
-        <h3>«Выцветший хлам и пылесборник»</h3>
-        <p class="pain-quote">«Прошел год, и ткань на балконе просто выцвела и стала хрупкой. А на кухне на ламелях оседает такой слой жира и пыли, что мыть их — это целый ад, проще выкинуть».</p>
       </article>
       <article class="pain-card reveal">
-        <div class="pain-ic" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <div class="pain-inner">
+          <div class="pain-ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          </div>
+          <h3>«Мастера, которые пропадают»</h3>
+          <p class="pain-quote">«Замерщик опоздал на 2 часа, при монтаже оставил грязь на подоконнике, а механизм заедает. Потом неделю дозваниваешься до офиса, чтобы они приехали и починили по гарантии».</p>
         </div>
-        <h3>«Мастера, которые пропадают»</h3>
-        <p class="pain-quote">«Замерщик опоздал на 2 часа, при монтаже оставил грязь на подоконнике, а механизм заедает. Потом неделю дозваниваешься до офиса, чтобы они приехали и починили по гарантии».</p>
       </article>
     </div>
   </div>
@@ -620,7 +647,13 @@
       <h2>Шесть типов жалюзи под любую комнату</h2>
       <p class="lead">От строгих рулонных до тёплых деревянных. Подберём тип под ваш интерьер и задачу — от полной темноты в спальне до мягкого рассеянного света в гостиной.</p>
     </div>
-    <div class="catalog-grid" id="catalogGrid"></div>
+    <div class="cat-slider">
+      <div class="cat-navs">
+        <button type="button" class="cat-nav prev" id="catPrev" aria-label="Предыдущие типы жалюзи"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button type="button" class="cat-nav next" id="catNext" aria-label="Следующие типы жалюзи"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      <div class="cat-track" id="catTrack"></div>
+    </div>
     <div class="portfolio-more">
       <a href="#calculator" class="btn btn-ink btn-lg">Рассчитать стоимость</a>
     </div>
@@ -638,7 +671,7 @@
     <div class="portfolio-grid" id="portfolioGrid"></div>
     <p class="portfolio-empty" id="portfolioEmpty" hidden>В этой категории пока нет проектов — выберите другой тип.</p>
     <div class="portfolio-more">
-      <a href="#contacts" class="btn btn-ghost btn-lg">Смотреть все работы</a>
+      <a href="#contacts" class="btn btn-ghost btn-lg">Смотреть живые образцы</a>
     </div>
   </div>
 </section>
@@ -827,7 +860,7 @@
 
 <!-- ============ FINAL CTA ============ -->
 <section class="final">
-  <div class="final-bg"><img src="images/work-3.jpg" alt="" loading="lazy" aria-hidden="true"></div>
+  <div class="final-bg"><img src="images/work-14.jpg" alt="" loading="lazy" aria-hidden="true"></div>
   <div class="wrap">
     <h2>Готовы создать идеальный световой сценарий в вашей квартире?</h2>
     <p>Оставьте заявку прямо сейчас, и инженер приедет к вам в удобное время с образцами тканей. Бесплатный замер + точная смета за 15 минут.</p>
@@ -1066,23 +1099,43 @@
     sectionsForNav.forEach(function(s){ spy.observe(s); });
   }
 
-  /* ---------- catalog ---------- */
-  var catalogGrid = document.getElementById('catalogGrid');
-  var catalogCards = [];
+  /* ---------- catalog slider ---------- */
+  var catTrack = document.getElementById('catTrack');
+  var catPrev = document.getElementById('catPrev');
+  var catNext = document.getElementById('catNext');
   CATALOG.forEach(function(c){
-    var card = el('article','cat-card reveal');
+    var card = el('article','cat-card');
     card.innerHTML =
-      '<div class="cat-ic" aria-hidden="true"><svg viewBox="0 0 24 24">'+ICON[c.icon]+'</svg></div>'+
-      '<h3>'+c.name+'</h3>'+
+      '<div class="cat-top">'+
+        '<div class="cat-ic" aria-hidden="true"><svg viewBox="0 0 24 24">'+ICON[c.icon]+'</svg></div>'+
+        '<h3>'+c.name+'</h3>'+
+      '</div>'+
       '<div class="cat-price">'+c.price+'</div>'+
       '<p>'+c.desc+'</p>'+
       '<ul class="cat-list">'+c.list.map(function(f){
         return '<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>'+f+'</span></li>';
       }).join('')+'</ul>';
-    catalogGrid.appendChild(card);
-    catalogCards.push(card);
-    reveals.push(card);
+    catTrack.appendChild(card);
   });
+
+  /* ---------- catalog slider: pages of 2 ---------- */
+  var catCards = [].slice.call(catTrack.children);
+  var catPage = 0;
+  var catPages = Math.ceil(catCards.length / 2);
+
+  function catShow(page){
+    catPage = Math.max(0, Math.min(catPages - 1, page));
+    catCards.forEach(function(card, i){
+      var on = (i === catPage * 2) || (i === catPage * 2 + 1);
+      card.classList.toggle('active', on);
+      card.hidden = !on;
+    });
+    catPrev.disabled = catPage === 0;
+    catNext.disabled = catPage === catPages - 1;
+  }
+  catPrev.addEventListener('click', function(){ catShow(catPage - 1); });
+  catNext.addEventListener('click', function(){ catShow(catPage + 1); });
+  catShow(0);
   revealSweep();
 
   /* ---------- portfolio ---------- */
