@@ -16,6 +16,9 @@
     --muted:#6B6560;
     --sage:#7A9E7E;
     --sage-dark:#5E8262;
+    /* deeper green for text on the pale sage plate: --sage-dark only reaches
+       3.87:1 there, which is under AA for body-size type */
+    --sage-deep:#3F6643;
     --sage-soft:rgba(122,158,126,.12);
     --terra:#C4704B;
     --terra-dark:#A85B38;
@@ -321,8 +324,9 @@
   .form-note{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-top:16px}
   .form-note svg{width:15px;height:15px;stroke:var(--sage-dark);fill:none;stroke-width:1.8;flex:none}
   .form-trigger{margin-top:20px;padding:16px 18px;border-radius:var(--radius-sm);background:rgba(122,158,126,.12);border:1px solid rgba(122,158,126,.3);
-    font-size:14.5px;color:#fff;display:flex;gap:11px;align-items:flex-start;line-height:1.55}
-  .form-trigger svg{width:19px;height:19px;stroke:var(--sage);fill:none;stroke-width:1.6;flex:none;margin-top:2px}
+    font-size:14.5px;color:var(--ink);display:flex;gap:11px;align-items:flex-start;line-height:1.55}
+  .form-trigger strong{font-weight:600;color:var(--sage-deep)}
+  .form-trigger svg{width:19px;height:19px;stroke:var(--sage-deep);fill:none;stroke-width:1.6;flex:none;margin-top:2px}
   .form-error{font-size:13px;color:#c0392b;margin-top:10px;display:none}
   .form-error.show{display:block}
   .field.invalid .input{border-color:#c0392b;box-shadow:0 0 0 3px rgba(192,57,43,.1)}
@@ -798,7 +802,7 @@
 
           <div class="form-trigger">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-            <span>Оставьте заявку сегодня, чтобы зафиксировать текущую цену на материалы (они дорожают каждый месяц) и получить монтаж в подарок при заказе от 3-х окон.</span>
+            <span>Оставьте заявку сегодня, чтобы <strong>зафиксировать текущую цену</strong> на материалы (они дорожают каждый месяц) и получить <strong>монтаж в подарок</strong> при заказе от 3-х окон.</span>
           </div>
         </form>
 
@@ -1441,14 +1445,16 @@
   });
 
   /* ---------- lead form ---------- */
-  /* Google Apps Script, deployed as "Anyone", does not return
-     Access-Control-Allow-Origin, so a normal cross-origin fetch is blocked by
-     the browser even though the script already received the data. The
-     no-cors + text/plain combination is the standard workaround: the request
-     goes through and the response is opaque, so we treat a resolved promise as
-     "delivered". A real failure (offline, bad URL, script error) still
-     rejects, so we can show an error and let the visitor retry.
-     The script reads the body with JSON.parse(e.postData.contents). */
+  /* Transport format: application/x-www-form-urlencoded (a bare, parameter-less
+     Content-Type). This is one of the three CORS-safelisted content types, so
+     the request needs no preflight and no Access-Control-Allow-Origin header on
+     the Apps Script side. Google fills e.parameter.name / e.parameter.phone
+     automatically, which is the most reliable way to read a web app.
+
+     The response stays opaque (Apps Script cannot add CORS headers), so a
+     resolved promise only proves the request left the browser — not that
+     doPost() finished. That is why the script must log its own failures to the
+     "Ошибки" sheet: the page cannot detect them. */
   var BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzfRTv8ydp5NYcVLd6GvWy8VhQJSnGnJi7LonuPFYzeGBu-_m5szd9EYQBdnHAFiAYE-A/exec';
 
   var form = document.getElementById('leadForm');
@@ -1499,11 +1505,20 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Отправляем…';
 
+    /* form-encoded body: e.parameter.* on the Apps Script side */
+    var body = Object.keys(payload).map(function(k){
+      return encodeURIComponent(k) + '=' + encodeURIComponent(payload[k]);
+    }).join('&');
+
+    /* POST is never served from cache, so no cache-buster is needed and the
+       URL stays exactly as deployed — e.parameter holds only our own fields. */
     fetch(BOOKING_ENDPOINT, {
       method: 'POST',
       mode: 'no-cors',
-      headers: {'Content-Type': 'text/plain;charset=utf-8'},
-      body: JSON.stringify(payload)
+      redirect: 'follow',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: body,
+      keepalive: true
     }).then(function(){
       form.style.display = 'none';
       formSuccess.classList.add('show');
