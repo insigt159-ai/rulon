@@ -74,6 +74,7 @@
   }
   .btn:hover{transform:translateY(-2px)}
   .btn:active{transform:translateY(0)}
+  .btn:disabled{opacity:.6;cursor:progress;transform:none;box-shadow:none}
   .btn-sage{background:var(--sage);color:#fff;box-shadow:0 6px 20px rgba(122,158,126,.28)}
   .btn-sage:hover{background:var(--sage-dark);box-shadow:0 10px 26px rgba(122,158,126,.34)}
   .btn-terra{background:var(--terra);color:#fff;box-shadow:0 6px 20px rgba(196,112,75,.3)}
@@ -792,6 +793,7 @@
 
           <button type="submit" class="btn btn-terra btn-lg">Вызвать инженера с образцами</button>
           <p class="form-error" id="formError" role="alert">Проверьте имя и номер телефона.</p>
+          <p class="form-error" id="formSendError" role="alert">Не удалось отправить заявку — нет связи с сервером. Проверьте интернет и попробуйте ещё раз.</p>
           <p class="form-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Ваши данные в безопасности. Мы не передаём их третьим лицам.</p>
 
           <div class="form-trigger">
@@ -1439,18 +1441,37 @@
   });
 
   /* ---------- lead form ---------- */
+  /* Google Apps Script, deployed as "Anyone", does not return
+     Access-Control-Allow-Origin, so a normal cross-origin fetch is blocked by
+     the browser even though the script already received the data. The
+     no-cors + text/plain combination is the standard workaround: the request
+     goes through and the response is opaque, so we treat a resolved promise as
+     "delivered". A real failure (offline, bad URL, script error) still
+     rejects, so we can show an error and let the visitor retry.
+     The script reads the body with JSON.parse(e.postData.contents). */
+  var BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzfRTv8ydp5NYcVLd6GvWy8VhQJSnGnJi7LonuPFYzeGBu-_m5szd9EYQBdnHAFiAYE-A/exec';
+
   var form = document.getElementById('leadForm');
   var formError = document.getElementById('formError');
+  var formSendError = document.getElementById('formSendError');
   var formSuccess = document.getElementById('formSuccess');
   var nameField = document.getElementById('f-name');
   var phoneField = document.getElementById('f-phone');
   var nameInput = document.getElementById('leadName');
+  var submitBtn = form.querySelector('button[type="submit"]');
+  var submitIdle = submitBtn.textContent;
+  var sending = false;
 
   function digits(v){ return v.replace(/\D/g,''); }
 
+  submitBtn.disabled = false;
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    var nameOk = nameInput.value.trim().length >= 2;
+    if(sending) return;
+
+    nameInput.value = nameInput.value.trim();
+    var nameOk = nameInput.value.length >= 2;
     var phoneOk = digits(phone.value).length === 11;
 
     nameField.classList.toggle('invalid', !nameOk);
@@ -1460,9 +1481,41 @@
     if(!nameOk){ nameInput.focus(); return; }
     if(!phoneOk){ phone.focus(); return; }
 
-    form.style.display = 'none';
-    formSuccess.classList.add('show');
-    formSuccess.scrollIntoView({block:'nearest', behavior:'smooth'});
+    formSendError.classList.remove('show');
+
+    var timeOpt = form.querySelector('input[name="time"]:checked');
+    var payload = {
+      name: nameInput.value.trim(),
+      phone: digits(phone.value),
+      phoneDisplay: phone.value.trim(),
+      time: timeOpt ? timeOpt.value : '',
+      calc: lastCalc ? lastCalc.type + ', ' + lastCalc.count + ' окн, ' + lastCalc.w + '×' +
+             lastCalc.h + ' см, ' + lastCalc.total + ' ₽' : '',
+      page: location.href,
+      ts: new Date().toISOString()
+    };
+
+    sending = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Отправляем…';
+
+    fetch(BOOKING_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload)
+    }).then(function(){
+      form.style.display = 'none';
+      formSuccess.classList.add('show');
+      formSuccess.scrollIntoView({block:'nearest', behavior:'smooth'});
+    }).catch(function(err){
+      sending = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = submitIdle;
+      formSendError.classList.add('show');
+      submitBtn.focus();
+      console.error('lead form send failed:', err);
+    });
   });
 
   [nameInput, phone].forEach(function(i){
@@ -1479,6 +1532,9 @@
     formSuccess.classList.remove('show');
     form.style.display = '';
     calcContext.classList.remove('show');
+    sending = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = submitIdle;
     nameInput.focus();
   });
 
