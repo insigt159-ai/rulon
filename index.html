@@ -20,6 +20,10 @@
        3.87:1 there, which is under AA for body-size type */
     --sage-deep:#3F6643;
     --sage-soft:rgba(122,158,126,.12);
+    /* punchier green for the "Знакомо?" eyebrow: same hue as --sage-dark
+       (126.5deg) but saturation 16% -> 40% and lightness 44% -> 32%, which
+       lifts it from 4.05:1 (below AA at 12px) to 5.46:1 on --bg */
+    --sage-ink:#317238;
     --terra:#C4704B;
     --terra-dark:#A85B38;
     --terra-bright:#D46130;
@@ -140,7 +144,11 @@
   .hero-points{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:26px;list-style:none;padding:0}
   .hero-points li{display:flex;align-items:center;gap:8px;font-size:14.5px;color:var(--muted);font-weight:500}
   .hero-points svg{width:17px;height:17px;stroke:var(--sage-dark);fill:none;stroke-width:2;flex:none}
-  .hero-media{position:relative;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-lg)}
+  /* top of the photo level with the FIRST LINE of the h1, not with the optical
+     centre of the column: 42px = overline block (12px*1.7 line box + 16px
+     margin) + 6px of line-box half-leading. Verified level at 1440 and 1024. */
+  .hero-media{position:relative;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-lg);
+    align-self:start;margin-top:42px}
   .hero-media img{width:100%;height:auto;aspect-ratio:1.2/1;object-fit:cover}
   /* corner scrim: the top-right of the photo is bright (measured median
      luminance 0.42-0.49, peaks 0.84), so bare white type lands at ~2:1 there.
@@ -170,6 +178,10 @@
   .section-head{max-width:720px}
   .section-head.center{margin:0 auto;text-align:center}
   .section-head.center .lead{margin-left:auto;margin-right:auto;max-width:840px}
+  /* "Знакомо?" — lift the eyebrow 12px off the headline: negative top margin
+     raises it, the extra bottom margin keeps the h2 exactly where it was, so the
+     gap to the title goes 16px -> 28px without any transform hack */
+  #problems .overline{margin-top:-12px;margin-bottom:28px;color:var(--sage-ink)}
   .section-dark{background:var(--dark);color:#fff}
   .section-dark .lead{color:var(--dark-muted)}
 
@@ -448,6 +460,8 @@
     .burger{display:flex}
     .hero{padding-top:calc(var(--header-h) + 40px)}
     .hero-grid{grid-template-columns:1fr}
+    /* stacked: the photo sits below the copy, so keep it on the grid baseline */
+    .hero-media{align-self:auto;margin-top:0}
     .hero-media img{aspect-ratio:16/11}
     .hero-badge{right:16px;top:16px;max-width:calc(100% - 32px);gap:10px}
     .hero-badge .ic{width:42px;height:42px;border-radius:13px}
@@ -481,7 +495,10 @@
     .hero-stats{gap:20px 28px}
     .hero-stat b{font-size:22px}
     .pains-grid,.solutions-grid{grid-template-columns:1fr}
-    .cat-track{grid-template-columns:1fr;gap:16px;margin:0}
+    .cat-track{display:block;grid-template-columns:none;gap:0;margin:0}
+    .cat-card{margin:0 auto 16px;max-width:640px}
+    .cat-card:last-child{margin-bottom:0}
+    .cat-card[hidden]{display:none !important}
     .cat-navs{gap:14px;margin-bottom:24px}
     .cat-nav{width:60px;height:60px}
     .cat-nav svg{width:25px;height:25px}
@@ -981,27 +998,27 @@
 
   var PROJECTS = [
     {cat:'Рулонные',title:'Гостиная',img:'images/work-1.jpg',
-      specs:{type:'Рулонные Blackout',volume:'3 панорамных окна (2,5 м)',color:'Графит',feature:'Синхронизированное управление с пульта',install:'Монтаж: 1 день'}},
-    {cat:'Рулонные',title:'Кухня-студия в новостройке',img:'images/work-2.jpg',
-      specs:{type:'Зебра «День-ночь»',volume:'2 окна + балконная дверь',color:'Молочный',feature:'Пылеотталкивающая пропитка (кухня!)',install:'Монтаж: 4 часа'}},
-    {cat:'Кассетные',title:'Спальня в частном доме (мансарда)',img:'images/work-3.jpg',
-      specs:{type:'Кассетные с направляющими',volume:'2 наклонных окна',color:'Бежевый',feature:'Специальные крепления, ткань не провисает',install:'Монтаж: 5 часов'}},
-    {cat:'Горизонтальные',title:'Балкон в сталинке',img:'images/work-4.jpg',
-      specs:{type:'Горизонтальные алюминиевые',volume:'4 узких окна',color:'Шампань',feature:'Компактная система, не съедает пространство',install:'Монтаж: 3 часа'}},
-    {cat:'Рулонные',title:'Детская комната',img:'images/work-5.jpg',
+      specs:{type:'Рулонные Dim out',volume:'3 панорамных окна (2,5 м)',color:'Графит',feature:'Синхронизированное управление с пульта',install:'Монтаж: 1 день'}},
+    {cat:'Рулонные',title:'Гостиная',img:'images/work-2.jpg',
+      specs:{type:'Рулонные Dim out',volume:'3 панорамных окна (2,5 м)',color:'Графит',feature:'Синхронизированное управление с пульта',install:'Монтаж: 1 день'}},
+    {cat:'Плиссе',title:'Кухня-студия в новостройке',img:'images/work-3.jpg',
+      specs:{volume:'2 окна, второй свет',color:'Тёплый песочный',feature:'Двойная ткань: днём мягкий рассеянный свет',install:'Монтаж: 3 часа'}},
+    {cat:'Плиссе',title:'Кухня-студия в новостройке',img:'images/work-4.jpg',
+      specs:{volume:'2 окна, второй свет',color:'Тёплый песочный',feature:'Двойная ткань: днём мягкий рассеянный свет',install:'Монтаж: 3 часа'}},
+    {cat:'Кассетные',title:'Спальня в новостройке',img:'images/work-5.jpg',
+      specs:{type:'рулонные Blackout',volume:'1 окно',color:'Тёмно-синий',feature:'Влагостойкие с антистатиком',install:'Монтаж: 2 часа'}},
+    {cat:'Плиссе',title:'Спальня в частном доме',img:'images/work-6.jpg',
+      specs:{type:'Римские Dim out',volume:'2 окна, южная сторона',color:'Бежевый',feature:'Не выгорает на солнце второй сезон',install:'Монтаж: 4 часа'}},
+    {cat:'Плиссе',title:'Мансарда в загородном доме',img:'images/work-7.jpg',
+      specs:{type:'Плиссе «день-ночь»',volume:'1 окно',color:'Тёплый песочный',feature:'Двойная ткань: днём мягкий рассеянный свет',install:'Монтаж: 1 час'}},
+    {cat:'Горизонтальные',title:'Спальня',img:'images/work-8.jpg',
+      specs:{type:'Горизонтальные деревянные',volume:'3 окна',color:'Чёрный',feature:'Влагостойкие ламели с антистатиком',install:'Монтаж: 4 часа'}},
+    {cat:'Рулонные',title:'Детская комната',img:'images/work-9.jpg',
       specs:{type:'Рулонные с фотопечатью',volume:'1 большое окно',color:'Рисунок: космос',feature:'Индивидуальный дизайн + Blackout для дневного сна',install:'Изготовление: 5 дней'}},
-    {cat:'Плиссе',title:'Гостиная в загородном доме',img:'images/work-6.jpg',
-      specs:{type:'Плиссе «день-ночь»',volume:'4 окна, второй свет',color:'Тёплый песочный',feature:'Двойная ткань: днём мягкий рассеянный свет',install:'Монтаж: 6 часов'}},
-    {cat:'Деревянные',title:'Кабинет',img:'images/work-7.jpg',
-      specs:{type:'Деревянные, шпон ореха',volume:'2 окна в пол',color:'Орех',feature:'Подгонка цвета под книжные шкафы',install:'Монтаж: 5 часов'}},
-    {cat:'Горизонтальные',title:'Спальня в новостройке',img:'images/work-8.jpg',
-      specs:{type:'Горизонтальные алюминиевые',volume:'3 окна',color:'Светлый шампань',feature:'Влагостойкие ламели с антистатиком',install:'Монтаж: 4 часа'}},
-    {cat:'Кассетные',title:'Кухня-гостиная',img:'images/work-9.jpg',
-      specs:{type:'Кассетные с электроприводом',volume:'2 широких окна',color:'Серо-бежевый',feature:'Пульт и таймер на восход солнца',install:'Монтаж: 1 день'}},
-    {cat:'Плиссе',title:'Офис дизайнера',img:'images/work-10.jpg',
-      specs:{type:'Плиссе, двойная ткань',volume:'3 окна',color:'Белый молочный',feature:'Не бликует на мониторах, эстетичный вид',install:'Монтаж: 3 часа'}},
-    {cat:'Рулонные',title:'Спальня в частном доме',img:'images/work-11.jpg',
-      specs:{type:'Рулонные Dim out',volume:'2 окна, южная сторона',color:'Бежевый',feature:'Не выгорает на солнце второй сезон',install:'Монтаж: 4 часа'}}
+    {cat:'Горизонтальные',title:'Балкон в сталинке',img:'images/work-10.jpg',
+      specs:{type:'Горизонтальные алюминиевые',volume:'4 узких окна',color:'Шампань',feature:'Компактная система, не съедает пространство',install:'Монтаж: 3 часа'}},
+    {cat:'Деревянные',title:'Кабинет',img:'images/work-11.jpg',
+      specs:{type:'Деревянные, шпон ореха',volume:'5 окон',color:'Орех',feature:'Подгонка цвета под книжные шкафы',install:'Монтаж: 4 часа'}}
   ];
 
   var REVIEWS = [
@@ -1138,20 +1155,41 @@
     catTrack.appendChild(card);
   });
 
-  /* ---------- catalog slider: pages of 2 ---------- */
+  /* ---------- catalog slider: responsive pages ---------- */
   var catCards = [].slice.call(catTrack.children);
   var catPage = 0;
-  var catPages = Math.ceil(catCards.length / 2);
+  var mqMobile = window.matchMedia('(max-width: 768px)');
+  function calcCatPages(){
+    var perView = mqMobile.matches ? 1 : 2;
+    return Math.ceil(catCards.length / perView);
+  }
+  function getPerView(){
+    // На мобильных (включая планшеты < 769) показываем по 1
+    return mqMobile.matches ? 1 : 2;
+  }
 
   function catShow(page){
-    catPage = Math.max(0, Math.min(catPages - 1, page));
+    var perView = getPerView();
+    var pages = Math.ceil(catCards.length / perView);
+    catPage = Math.max(0, Math.min(pages - 1, page));
     catCards.forEach(function(card, i){
-      var on = (i === catPage * 2) || (i === catPage * 2 + 1);
+      var start = catPage * perView;
+      var on = (i >= start) && (i < start + perView);
       card.classList.toggle('active', on);
       card.hidden = !on;
     });
+    var pagesFinal = Math.ceil(catCards.length / perView);
     catPrev.disabled = catPage === 0;
-    catNext.disabled = catPage === catPages - 1;
+    catNext.disabled = catPage === pagesFinal - 1;
+  }
+  function catResize(){
+    catPage = 0;
+    catShow(0);
+  }
+  if (mqMobile.addEventListener){
+    mqMobile.addEventListener('change', catResize);
+  } else {
+    mqMobile.addListener(catResize);
   }
   catPrev.addEventListener('click', function(){ catShow(catPage - 1); });
   catNext.addEventListener('click', function(){ catShow(catPage + 1); });
